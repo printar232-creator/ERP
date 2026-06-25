@@ -44,7 +44,7 @@ with col1:
         calc_mat_cost = base_material_cost / (1 - (loss_percentage / 100))
     else:
         calc_mat_cost = 0.0
-    st.info(f"Mat Cost (+Loss): **{calc_mat_cost:,.2f}**")
+    st.info(f"Mat Cost (+Loss): {calc_mat_cost:,.2f}")
 
 with col2:
     st.subheader("⚡ Utilities & Labor")
@@ -65,13 +65,4 @@ with col3:
     imp_exp = st.number_input("IMPORT/EXPORT", value=0.0)
     commission = st.number_input("COMISSTION", value=0.0)
 
-# --- ส่วนที่ 3: คำนวณและสรุปผล ---
-all_cost_no_material = maintenance + electricity + water + labour + packaging + oil + brass + imp_exp + commission
-total_cost = calc_mat_cost + all_cost_no_material
-
-st.divider()
-
-# แสดงผลลัพธ์สุดท้ายแบบเน้นๆ ให้แคปภาพสวยๆ
-res_col1, res_col2 = st.columns(2)
-with res_col1:
-    st.metric("ALL COST (NO MATERIAL)", f"{all_cost_no_material:,.4
+# --- ส่วนที่
