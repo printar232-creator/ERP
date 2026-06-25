@@ -1,45 +1,26 @@
 import streamlit as st
 
-# ตั้งค่าหน้าเว็บให้เป็นแบบกว้างเพื่อให้เห็นทุกอย่างในหน้าเดียว
+# ตั้งค่าหน้าเว็บ (เอา CSS ที่บีบหน้าจอออก)
 st.set_page_config(page_title="Cost Calculator", layout="wide")
-
-# CSS เพื่อลด padding และระยะห่างเพื่อให้เหมาะกับการแคปภาพ
-st.markdown("""
-    <style>
-    .block-container {
-        padding-top: 1rem;
-        padding-bottom: 0rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
-    div[data-testid="stVerticalBlock"] > div {
-        margin-top: -10px;
-    }
-    h1, h2, h3 {
-        margin-bottom: 5px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
 st.title("📊 Cost Calculator: LAOS (NONG KHAI)")
 
-# --- ส่วนที่ 1: ตั้งค่าเบื้องต้น ---
-col_head1, col_head2 = st.columns([2, 1])
-with col_head1:
+# --- ส่วนที่ 1: การตั้งค่า (Header) ---
+col_h1, col_h2 = st.columns([2, 1])
+with col_h1:
     package_size = st.radio("บรรจุภัณฑ์ (Package Size):", ["25kg", "50kg"], horizontal=True)
-with col_head2:
-    loss_percentage = st.number_input("% Loss (สูญเสีย)", min_value=0.0, value=0.0, step=0.1)
+with col_h2:
+    loss_percentage = st.number_input("% Loss (สูญเสีย)", min_value=0.0, value=10.0, step=0.1)
 
 st.divider()
 
-# --- ส่วนที่ 2: วัตถุดิบและค่าใช้จ่าย (แบ่งเป็น 3 คอลัมน์เพื่อความประหยัดเนื้อที่) ---
+# --- ส่วนที่ 2: ข้อมูลนำเข้า ---
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.subheader("🛠 Material")
-    base_material_cost = st.number_input("MATERIAL+CLEAR,TRANSPORT", value=4766.666667, format="%.6f")
-    
-    # คำนวณต้นทุนวัตถุดิบรวมสูญเสีย
+    st.markdown("### 🛠 Material")
+    base_material_cost = st.number_input("MATERIAL+CLEAR,TRANSPORT", value=4290.0, format="%.6f")
+    # คำนวณ Material รวม Loss
     if loss_percentage < 100:
         calc_mat_cost = base_material_cost / (1 - (loss_percentage / 100))
     else:
@@ -47,22 +28,19 @@ with col1:
     st.info(f"Mat Cost (+Loss): {calc_mat_cost:,.2f}")
 
 with col2:
-    st.subheader("⚡ Utilities & Labor")
-    maintenance = st.number_input("MAINTANANCE", value=120.5641558, format="%.6f")
-    electricity = st.number_input("ELECTRICITY", value=335.3956996, format="%.6f")
-    water = st.number_input("WATER SECTION", value=0.0)
+    st.markdown("### ⚡ Utilities & Labor")
+    maintenance = st.number_input("MAINTANANCE", value=120.564156, format="%.6f")
+    electricity = st.number_input("ELECTRICITY", value=335.395700, format="%.6f")
+    water = st.number_input("WATER SECTION", value=0.0, format="%.6f")
     labour = st.number_input("LABOUR", value=1587.691604, format="%.6f")
 
 with col3:
-    st.subheader("📦 Others")
+    st.markdown("### 📦 Others")
     if package_size == "25kg":
-        packaging = st.number_input("PAKAGING (25kg)", value=414.5)
+        packaging = st.number_input("PAKAGING (25kg)", value=414.50)
     else:
-        packaging = st.number_input("PAKAGING (50kg)", value=476.0)
+        packaging = st.number_input("PAKAGING (50kg)", value=476.00)
     
-    oil = st.number_input("OIL", value=47.3762619, format="%.6f")
-    brass = st.number_input("BRASS", value=22.0358699, format="%.6f")
-    imp_exp = st.number_input("IMPORT/EXPORT", value=0.0)
-    commission = st.number_input("COMISSTION", value=0.0)
-
-# --- ส่วนที่
+    oil = st.number_input("OIL", value=47.376262, format="%.6f")
+    brass = st.number_input("BRASS", value=22.035870, format="%.6f")
+    imp_exp = st.number_input("IMPORT/EXPORT",
